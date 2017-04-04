@@ -29,6 +29,7 @@ var participationSchema = new Schema({
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'user'
 	},
+	'refFriendId' : String,
 	'friendParticNumber' : {
 		type:Number,
 	 	required: true

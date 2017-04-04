@@ -14,7 +14,7 @@ var userSchema = new Schema({
 	 	default: Date.now
 	 },
 	'firstName' : String,
-	'lastName ' : String,
+	'lastName' : String,
 	'sex' : String,
 	'age' : Number,
 	'email' : String,

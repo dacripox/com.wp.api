@@ -15,6 +15,12 @@ router.get('/:id', promotionController.show);
 /*
  * GET
  */
+router.get('/id/:promoId', promotionController.showByPromoId);
+
+
+/*
+ * GET
+ */
 router.get('/available/:name', promotionController.idAvailable);
 
 /*

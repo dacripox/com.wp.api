@@ -144,6 +144,26 @@ module.exports = {
         });
     },
     /**
+     * promotionController.showByPromoId()
+     */
+    showByPromoId: function (req, res) {
+        var promoId = req.params.promoId;
+        promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting promotion.',
+                    error: err
+                });
+            }
+            if (!promotion) {
+                return res.status(404).json({
+                    message: 'No such promotion'
+                });
+            }
+            return res.json(promotion);
+        });
+    },
+    /**
      * promotionController.available()
      */
     idAvailable: function (req, res) {

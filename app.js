@@ -20,12 +20,30 @@ app.use(bodyParser.urlencoded({ extended: false }));
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
+
+var cors = require('cors');
+var whitelist = ['localhost:3001', 'localhost:3002']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS. Origin: ' + origin))
+    }
+  },
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
+}
+//CORS enable
+//app.use(cors(corsOptions));
+app.use(cors());
+
 //app.use('/', routes);
 app.use('/user', user);
 app.use('/promotion', promotion);
 app.use('/company', company);
 app.use('/participation', participation);
 app.use('/stats', stats);
+
 
 
 app.use(express.static(path.join(__dirname, 'images')));

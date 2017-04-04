@@ -66,7 +66,10 @@ module.exports = {
 			createdDate : req.body.createdDate,
 			promoId : req.body.promoId,
 			userId : req.body.userId,
+			promotion : req.body.promotion,
+			user : req.body.user,
 			refFriend : req.body.refFriend,
+			refFriendId : req.body.refFriendId,
 			friendParticNumber : req.body.friendParticNumber,
 			friendVisualNumber : req.body.friendVisualNumber,
 			points : req.body.points,
@@ -106,7 +109,10 @@ module.exports = {
             participation.createdDate = req.body.createdDate ? req.body.createdDate : participation.createdDate;
 			participation.promoId = req.body.promoId ? req.body.promoId : participation.promoId;
 			participation.userId = req.body.userId ? req.body.userId : participation.userId;
+			participation.promotion = req.body.promotion ? req.body.promotion : participation.promotion;
+			participation.user = req.body.user ? req.body.user : participation.user;
 			participation.refFriend = req.body.refFriend ? req.body.refFriend : participation.refFriend;
+			participation.refFriendId = req.body.refFriendId ? req.body.refFriendId : participation.refFriendId;
 			participation.friendParticNumber = req.body.friendParticNumber ? req.body.friendParticNumber : participation.friendParticNumber;
 			participation.friendVisualNumber = req.body.friendVisualNumber ? req.body.friendVisualNumber : participation.friendVisualNumber;
 			participation.points = req.body.points ? req.body.points : participation.points;
