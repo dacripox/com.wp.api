@@ -60,6 +60,7 @@ module.exports = {
 			onesignalId : req.body.onesignalId,
 			googleId : req.body.googleId,
 			facebookId : req.body.facebookId,
+            profileImg :req.body.profileImg,
 			lng : req.body.lng,
 			lat : req.body.lat,
 			postCode : req.body.postCode,
@@ -112,6 +113,7 @@ module.exports = {
 			user.onesignalId = req.body.onesignalId ? req.body.onesignalId : user.onesignalId;
 			user.googleId = req.body.googleId ? req.body.googleId : user.googleId;
 			user.facebookId = req.body.facebookId ? req.body.facebookId : user.facebookId;
+			user.profileImg = req.body.profileImg ? req.body.profileImg : user.profileImg;
 			user.lng = req.body.lng ? req.body.lng : user.lng;
 			user.lat = req.body.lat ? req.body.lat : user.lat;
 			user.postCode = req.body.postCode ? req.body.postCode : user.postCode;

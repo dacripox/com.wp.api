@@ -23,6 +23,21 @@ module.exports = {
     },
 
     /**
+     * participationController.listByPromotion()
+     */
+    listByPromotion: function (req, res) {
+        var promoId = req.params.promoId;
+        participationModel.find({"promoId": promoId}, function (err, participations) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting participation.',
+                    error: err
+                });
+            }
+            return res.json(participations);
+        });
+    },
+    /**
      * participationController.show()
      */
     show: function (req, res) {

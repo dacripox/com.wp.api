@@ -2,7 +2,7 @@ var jsonQuery = require('json-query');
 var fs = require('fs'),
     path = require('path');
 
-    var postalCodesFile = "postal-codes.json";
+var postalCodesFile = "postal-codes.json";
 /**
  * statsController.js
  *
@@ -10,19 +10,18 @@ var fs = require('fs'),
  */
 module.exports = {
 
-    
+
     /**
      * statsController.postalCodes()
      */
     postCodes: function (req, res) {
         var query = req.params.query;
 
-        var postalCodes =  JSON.parse(fs.readFileSync(postalCodesFile, 'utf8'));
+        var postalCodes = JSON.parse(fs.readFileSync(postalCodesFile, 'utf8'));
 
-        var postalCodesJSON = jsonQuery('people[*country='+query+']', {data: postalCodes});
+        var postalCodesJSON = jsonQuery('people[*country=' + query + ']', { data: postalCodes });
 
         return res.json(postalCodesJSON);
-        };
     }
 
 

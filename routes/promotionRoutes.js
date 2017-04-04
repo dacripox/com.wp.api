@@ -16,6 +16,17 @@ router.get('/:id', promotionController.show);
  * GET
  */
 router.get('/available/:name', promotionController.idAvailable);
+
+/*
+ * POST
+ */
+router.post('/endWithRaffle/:idPromo', promotionController.endPromoWithRaffle);
+
+/*
+ * POST
+ */
+router.post('/end/:idPromo', promotionController.endPromotion);
+
 /*
  * POST
  */

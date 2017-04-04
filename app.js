@@ -68,8 +68,14 @@ app.use('/auth/stats', auth, stats);
 
 
 
-app.listen(3001, function () {
-  console.log('WhatsPromo Node API listening on port 3001!');
+app.listen(3000, function () {
+  console.log('WhatsPromo API listening on port 3000!');
+
+  console.log(",--.   ,--.,--.               ,--.         ,------.                                 ");
+  console.log("|  |   |  ||  ,---.  ,--,--.,-'  '-. ,---. |  .--. ',--.--. ,---. ,--,--,--. ,---.  ");
+  console.log("|  |.'.|  ||  .-.  |' ,-.  |'-.  .-'(  .-' |  '--' ||  .--'| .-. ||        || .-. | ");
+  console.log("|   ,'.   ||  | |  |\\ '-'  |  |  |  .-'  `)|  | --' |  |   ' '-' '|  |  |  |' '-' ' ");
+  console.log("'--'   '--'`--' `--' `--`--'  `--'  `----' `--'     `--'    `---' `--`--`--' `---'  ");
 });
 
 

@@ -10,6 +10,11 @@ router.get('/', participationController.list);
 /*
  * GET
  */
+router.get('/promotion/:promoId', participationController.listByPromotion);
+
+/*
+ * GET
+ */
 router.get('/:id', participationController.show);
 
 /*

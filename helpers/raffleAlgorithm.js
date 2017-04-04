@@ -9,19 +9,11 @@ let getRandom = (arrayList, sumOfWeights) => {
 
 
 
-module.exports = {
-
-
-  /**
-   * raffleAlgorithm.js
-   *
-   * @description :: Server-side logic for raffle (random weighted list selection).
-   */
-  getFirstNElements: (numElements, arrayList) => {
+async function getFirstNElements(numElements, arrayList){
     selectedElements = {};
 
     sumOfWeights = arrayList.reduce(function (memo, item) {
-      return memo + item.weight;
+      return memo + item.points; //Change with the participant weight attribute (in our case, "points")
     }, 0);
 
     for (var i = 0; i < numElements; i++) {
@@ -30,5 +22,15 @@ module.exports = {
     }
  return selectedElements;
   }
+
+module.exports = {
+
+
+  /**
+   * raffleAlgorithm.js
+   *
+   * @description :: Server-side logic for raffle (random weighted list selection).
+   */
+  getFirstNElements: getFirstNElements
 
 }

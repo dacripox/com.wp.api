@@ -1,12 +1,104 @@
 var promotionModel = require('../models/promotionModel.js');
+var partcipationController = require('../controllers/participationController.js');
+var promotionController = require('../controllers/promotionController.js');
 var raffleAlgorithm = require('../helpers/raffleAlgorithm.js');
 
-let makeRaffle = (promoId) =>{
-    let participants = getParticipants(promoId);
-    raffleAlgorithm.getFirstNElements(promotion.winnersNumber,participants);
+var participationModel = require('../models/participationModel.js');
+var winnerModel = require('../models/winnerModel.js');
+
+async function getParticipants(promoId) {
+    /*    participationModel.find({promoId: promoId}, function (err, participations) {
+             if (err) {
+                return {};
+            }
+            if (!participations) {
+                return {};
+            }
+            return participations;
+        });*/
+
+    participationModel.find({ promoId: promoId })
+        .populate({
+            path: 'user'
+        })
+        .exec(function(err,participations) {
+            if (err) comsole.log(err);
+            return participations;
+        })
 }
 
 
+async function getPromotion(promoId) {
+    promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
+        if (err) {
+            return {};
+        }
+        if (!promotion) {
+            return {};
+        }
+        return promotion;
+    });
+}
+
+async function endPromotion(promoId) {
+    promotionModel.findById({ promoId: promoId }, function (err, promotion) {
+        // Handle any possible database errors
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            // Update each attribute with any possible attribute that may have been submitted in the body of the request
+            // If that attribute isn't in the request body, default back to whatever it was before.
+
+            promotion.promoEnded = true;
+
+            // Save the updated document back to the database
+            promotion.save(function (err, promotion) {
+                if (err) {
+                    res.status(500).send(err)
+                }
+                res.send(promotion);
+            });
+        }
+    });
+}
+
+async function createWinner(promoId, userId, points,displayName,profileImg,contact) {
+
+    var winner = new winnerModel({
+        promoId: promoId,
+        userId: userId,
+        points: points,
+        displayName: displayName,
+        profileImg: profileImg,
+        contact: contact
+    });
+
+
+    winner.save(function (err, winner) {
+        if (err) {
+            return res.status(500).json({
+                message: 'Error when creating winner',
+                error: err
+            });
+        }
+        return res.status(201).json(winner);
+    });
+}
+
+async function makeRaffleAndEndPromotion(promoId) {
+    let participants = await getParticipants(promoId);
+    let promotion = await getPromotion(promoId);
+    let winners = await raffleAlgorithm.getFirstNElements(promotion.winnersNumber, participants);
+   
+    for (var i = 0; i < winners.length; i++) {
+        let displayName = (winner.user.firstName + winner.user.lastName ) || winner.user.firstName || winner.user.email || winner.user.phone;
+        let contact = partcipant.user.email || winner.user.phone;
+        await createWinner(winner.promoId, winner.userId, winner.user.points, displayName,contact);   
+    }
+
+    let endPromo = await endPromotion(promoId);
+    return winners;
+};
 
 
 /**
@@ -79,20 +171,16 @@ module.exports = {
     * promotionController.endPromotion()
     */
     endPromotion: function (req, res) {
-
-
-
         var promoId = req.params.promoId;
 
-
-        promotionModel.findById(req.params.promoId, function (err, promotion) {
+        promotionModel.findById({ promoId: promoId }, function (err, promotion) {
             // Handle any possible database errors
             if (err) {
                 res.status(500).send(err);
             } else {
                 // Update each attribute with any possible attribute that may have been submitted in the body of the request
                 // If that attribute isn't in the request body, default back to whatever it was before.
-                
+
                 promotion.promoEnded = true;
 
                 // Save the updated document back to the database
@@ -104,9 +192,19 @@ module.exports = {
                 });
             }
         });
+    },
 
+
+    /**
+    * promotionController.endPromotion()
+    */
+    endPromoWithRaffle: function (req, res) {
+        var promoId = req.params.promoId;
+
+        return makeRaffleAndEndPromotion(promoId);
 
     },
+
 
     /**
      * promotionController.create()
