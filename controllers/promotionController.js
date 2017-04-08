@@ -252,7 +252,9 @@ module.exports = {
             postalCode: req.body.postalCode,
             fullAddress: req.body.fullAddress,
             companyId: req.body.companyId,
-            trollNumber: req.body.trollNumber
+            trollNumber: req.body.trollNumber,
+            facebookTrackingPixel: req.body.facebookTrackingPixel,
+            googleTrackingPixel: req.body.googleTrackingPixel
         });
 
         promotion.save(function (err, promotion) {
@@ -306,6 +308,8 @@ module.exports = {
             promotion.fullAddress = req.body.fullAddress ? req.body.fullAddress : promotion.fullAddress;
             promotion.companyId = req.body.companyId ? req.body.companyId : promotion.companyId;
             promotion.trollNumber = req.body.trollNumber ? req.body.trollNumber : promotion.trollNumber;
+            promotion.facebookTrackingPixel = req.body.facebookTrackingPixel ? req.body.facebookTrackingPixel : promotion.facebookTrackingPixel;
+            promotion.googleTrackingPixel = req.body.googleTrackingPixel ? req.body.googleTrackingPixel : promotion.googleTrackingPixel;
 
             promotion.save(function (err, promotion) {
                 if (err) {

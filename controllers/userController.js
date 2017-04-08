@@ -43,6 +43,27 @@ module.exports = {
         });
     },
 
+
+    /**
+     * userController.show()
+     */
+    showByUserId: function (req, res) {
+        var promoId = req.params.promoId;
+        userModel.findOne({promoId: promoId}, function (err, user) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting user.',
+                    error: err
+                });
+            }
+            if (!user) {
+                return res.status(404).json({
+                    message: 'No such user'
+                });
+            }
+            return res.json(user);
+        });
+    },
     /**
      * userController.create()
      */
