@@ -62,6 +62,7 @@ var promotionSchema = new Schema({
 		type: Number,
 		required: true,
 	},
+	'priceItemAvg': String,
 	'showLocalization': {
 		type: Boolean,
 		required: true,

@@ -124,6 +124,22 @@ module.exports = {
     },
 
     /**
+     * promotionController.listPromotionsByCompanyId()
+     */
+    listPromotionsByCompanyId: function (req, res) {
+        let companyId = req.params.companyId;
+        promotionModel.find({companyId:companyId},function (err, promotions) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting promotion.',
+                    error: err
+                });
+            }
+            return res.json(promotions);
+        });
+    },
+
+    /**
      * promotionController.show()
      */
     show: function (req, res) {
@@ -175,7 +191,7 @@ module.exports = {
                     error: err
                 });
             }
-            if (promotion) {
+            if (!promotion) {
                 return res.status(200).json({
                     available: true
                 });
@@ -246,6 +262,7 @@ module.exports = {
             participNumber: req.body.participNumber,
             shareMessages: req.body.shareMessages,
             winnersNumber: req.body.winnersNumber,
+            priceItemAvg: req.body.priceItemAvg,
             showLocalization: req.body.showLocalization,
             lat: req.body.lat,
             lng: req.body.lng,
@@ -301,6 +318,7 @@ module.exports = {
             promotion.participNumber = req.body.participNumber ? req.body.participNumber : promotion.participNumber;
             promotion.shareMessages = req.body.shareMessages ? req.body.shareMessages : promotion.shareMessages;
             promotion.winnersNumber = req.body.winnersNumber ? req.body.winnersNumber : promotion.winnersNumber;
+            promotion.priceItemAvg = req.body.priceItemAvg ? req.body.priceItemAvg : promotion.priceItemAvg;
             promotion.showLocalization = req.body.showLocalization ? req.body.showLocalization : promotion.showLocalization;
             promotion.lat = req.body.lat ? req.body.lat : promotion.lat;
             promotion.lng = req.body.lng ? req.body.lng : promotion.lng;

@@ -17,11 +17,16 @@ router.get('/:id', promotionController.show);
  */
 router.get('/id/:promoId', promotionController.showByPromoId);
 
+/*
+ * GET
+ */
+router.get('/company/:companyId', promotionController.listPromotionsByCompanyId);
+
 
 /*
  * GET
  */
-router.get('/available/:name', promotionController.idAvailable);
+router.get('/available/:name', promotionController.idAvailable); //TODO: make variables name consistent
 
 /*
  * POST
