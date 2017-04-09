@@ -11,6 +11,10 @@ router.get('/', participationController.list);
  * GET
  */
 router.get('/promotion/:promoId', participationController.listByPromotion);
+/*
+ * GET
+ */
+router.get('/user/:userId/promotion/:promoId', participationController.showByUserIdAndPromoId);
 
 /*
  * GET
@@ -25,16 +29,16 @@ router.post('/', participationController.create);
 /*
  * POST
  */
-router.post('/increment-points/:userId/:points', participationController.incrementPoints);
+router.post('/increment-points/user/:userId/promotion/:promoId/points/:points', participationController.incrementPoints);
 
 /*
  * POST
  */
-router.post('/increment-visualization/:userId', participationController.incrementVisualization);
+router.post('/increment-visualization/user/:userId/promotion/:promoId', participationController.incrementVisualization);
 /*
  * POST
  */
-router.post('/increment-participation/:userId', participationController.incrementParticpation);
+router.post('/increment-participation/user/:userId/promotion/:promoId', participationController.incrementParticpation);
 
 /*
  * PUT

@@ -46,6 +46,63 @@ module.exports = {
         });
     },
 
+    /**
+     * checkIfUserExist.show()
+     */
+    checkIfUserExist: function (req, res) {
+        console.log("entra");
+        var email = req.params.email;
+        var phone = req.params.phone;
+
+        if (email) {
+            userModel.findOne({ "email": email }, function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting user.',
+                        error: err
+                    });
+                }
+                if (user) {
+                    return res.json(user);
+                }else{
+                    
+                    userModel.findOne({ "phone": phone }, function (err, user) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when getting user.',
+                                error: err
+                            });
+                        }
+                        if (user) {
+                            return res.json(user);
+                        }else{
+                            return res.json({});
+                        }
+                    });
+                    
+                }
+            });
+        } else if (phone) {
+            userModel.findOne({ "phone": phone }, function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting user.',
+                        error: err
+                    });
+                }
+                if (user) {
+                    return res.json(user);
+                }else{
+                    return res.json({});
+                }
+            });
+        }
+
+        if (!phone && !email) {
+            return res.json({});
+        }
+    },
+
 
     /**
      * userController.show()

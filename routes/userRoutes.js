@@ -8,6 +8,11 @@ var participationController = require('../controllers/participationController.js
  */
 router.get('/', userController.list);
 
+/*
+ * GET
+ */
+router.get('/exist/email/:email/phone/:phone', userController.checkIfUserExist);
+
 
 /*
  * GET
