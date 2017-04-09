@@ -6,7 +6,26 @@ var participationModel = require('../models/participationModel.js');
  * @description :: Server-side logic for managing participations.
  */
 module.exports = {
-
+    /**
+     * participationController.userIsParticipating()
+     */
+    userIsParticipating: function (req, res) {
+        
+        var userId = req.params.userId;
+        var promoId = req.params.promoId;
+        participationModel.findOne({userId: userId, promoId: promoId}, function (err, participation) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting participation.',
+                    error: err
+                });
+            }
+            if (!participation) {
+                return false;
+            }
+            return true;
+        });
+    },
     /**
      * participationController.list()
      */
@@ -118,6 +137,140 @@ module.exports = {
 			participation.points = req.body.points ? req.body.points : participation.points;
 			participation.ip = req.body.ip ? req.body.ip : participation.ip;
 			participation.pushEnabled = req.body.pushEnabled ? req.body.pushEnabled : participation.pushEnabled;
+			
+            participation.save(function (err, participation) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating participation.',
+                        error: err
+                    });
+                }
+
+                return res.json(participation);
+            });
+        });
+    },
+    /**
+     * incrementVisualization.update()
+     */
+    incrementVisualization: function (req, res) {
+        var userId = req.params.userId;
+        participationModel.findOne({userId: userId}, function (err, participation) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting participation',
+                    error: err
+                });
+            }
+            if (!participation) {
+                return res.status(404).json({
+                    message: 'No such participation'
+                });
+            }
+
+            participation.createdDate =  participation.createdDate;
+			participation.promoId =  participation.promoId;
+			participation.userId =  participation.userId;
+			participation.promotion =  participation.promotion;
+			participation.user =  participation.user;
+			participation.refFriend =  participation.refFriend;
+			participation.refFriendId =  participation.refFriendId;
+			participation.friendParticNumber =  participation.friendParticNumber;
+			participation.friendVisualNumber =  participation.friendVisualNumber + 1;  //Add visualization
+			participation.points = participation.points;
+			participation.ip =  participation.ip;
+			participation.pushEnabled =  participation.pushEnabled;
+			
+            participation.save(function (err, participation) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating participation.',
+                        error: err
+                    });
+                }
+
+                return res.json(participation);
+            });
+        });
+    },
+   /**
+     * incrementVisualization.update()
+     */
+    incrementParticpation: function (req, res) {
+        var userId = req.params.userId;
+        participationModel.findOne({userId: userId}, function (err, participation) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting participation',
+                    error: err
+                });
+            }
+            if (!participation) {
+                return res.status(404).json({
+                    message: 'No such participation'
+                });
+            }
+
+            participation.createdDate =  participation.createdDate;
+			participation.promoId =  participation.promoId;
+			participation.userId =  participation.userId;
+			participation.promotion =  participation.promotion;
+			participation.user =  participation.user;
+			participation.refFriend =  participation.refFriend;
+			participation.refFriendId =  participation.refFriendId;
+			participation.friendParticNumber =  participation.friendParticNumber + 1; //Add participation
+			participation.friendVisualNumber =  participation.friendVisualNumber;
+			participation.points = participation.points;
+			participation.ip =  participation.ip;
+			participation.pushEnabled =  participation.pushEnabled;
+			
+            participation.save(function (err, participation) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when updating participation.',
+                        error: err
+                    });
+                }
+
+                return res.json(participation);
+            });
+        });
+    },
+ /**
+     * incrementPoints.update()
+     */
+    incrementPoints: function (req, res) {
+
+        //increment-points/' + userId + '/' + points
+
+        var userId = req.params.userId;
+        var points = parseInt(req.params.points);
+
+        participationModel.findOne({userId: userId}, function (err, participation) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting participation',
+                    error: err
+                });
+            }
+            if (!participation) {
+                return res.status(404).json({
+                    message: 'No such participation'
+                });
+            }
+
+            participation.createdDate =  participation.createdDate;
+			participation.promoId =  participation.promoId;
+			participation.userId =  participation.userId;
+			participation.promotion =  participation.promotion;
+			participation.user =  participation.user;
+			participation.refFriend =  participation.refFriend;
+			participation.refFriendId =  participation.refFriendId;
+			participation.friendParticNumber =  participation.friendParticNumber;
+			participation.friendVisualNumber =  participation.friendVisualNumber;
+			participation.points = participation.points + points; //add points
+			participation.ip =  participation.ip;
+			participation.pushEnabled =  participation.pushEnabled;
 			
             participation.save(function (err, participation) {
                 if (err) {

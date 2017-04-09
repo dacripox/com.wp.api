@@ -43,6 +43,27 @@ module.exports = {
         });
     },
 
+
+    /**
+     * companyController.showByEmail()
+     */
+    showByEmail: function (req, res) {
+        var companyEmail = req.params.companyEmail;
+        companyModel.findOne({email: companyEmail}, function (err, company) {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Error when getting company.',
+                    error: err
+                });
+            }
+            if (!company) {
+                return res.status(404).json({
+                    message: 'No such company'
+                });
+            }
+            return res.json(company);
+        });
+    },
     /**
      * companyController.create()
      */

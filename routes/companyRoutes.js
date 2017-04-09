@@ -13,6 +13,11 @@ router.get('/', companyController.list);
 router.get('/:id', companyController.show);
 
 /*
+ * GET
+ */
+router.get('/email/:companyEmail', companyController.showByEmail);
+
+/*
  * POST
  */
 router.post('/', companyController.create);

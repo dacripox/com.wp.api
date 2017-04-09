@@ -23,6 +23,20 @@ router.get('/:id', participationController.show);
 router.post('/', participationController.create);
 
 /*
+ * POST
+ */
+router.post('/increment-points/:userId/:points', participationController.incrementPoints);
+
+/*
+ * POST
+ */
+router.post('/increment-visualization/:userId', participationController.incrementVisualization);
+/*
+ * POST
+ */
+router.post('/increment-participation/:userId', participationController.incrementParticpation);
+
+/*
  * PUT
  */
 router.put('/:id', participationController.update);

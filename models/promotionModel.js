@@ -11,7 +11,7 @@ var promotionSchema = new Schema({
 	},
 	'promoEnabled': {
 		type: Boolean,
-		required: true
+		default: true
 	},
 	'promoEnded': {
 		type: Boolean,
@@ -55,7 +55,7 @@ var promotionSchema = new Schema({
 	},
 	'participNumber': {
 		type: Number,
-		required: true,
+		default: 0
 	},
 	'shareMessages': Array,
 	'winnersNumber': {

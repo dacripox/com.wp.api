@@ -45,7 +45,7 @@ var participationSchema = new Schema({
 	'ip' : String,
 	'pushEnabled'  : {
 		type:Boolean,
-	 	default: false 
+	 	default: true 
 	 },
 	'schemaVer' : {
 		type: Number,

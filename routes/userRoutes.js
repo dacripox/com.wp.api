@@ -1,11 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/userController.js');
+var participationController = require('../controllers/participationController.js');
 
 /*
  * GET
  */
 router.get('/', userController.list);
+
+
+/*
+ * GET
+ */
+router.get('/participates/:userId/:promoId', participationController.userIsParticipating);
 
 /*
  * GET
