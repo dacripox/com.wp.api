@@ -108,8 +108,8 @@ module.exports = {
      * userController.show()
      */
     showByUserId: function (req, res) {
-        var promoId = req.params.promoId;
-        userModel.findOne({ promoId: promoId }, function (err, user) {
+        var userId = req.params.userId;
+        userModel.findOne({ userId: userId }, function (err, user) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting user.',

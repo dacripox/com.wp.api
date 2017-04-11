@@ -22,12 +22,14 @@ router.get('/participates/:userId/:promoId', participationController.userIsParti
 /*
  * GET
  */
-router.get('/:id', userController.show);
+router.get('/id/:userId', userController.showByUserId);
+
 
 /*
  * GET
  */
-router.get('/id/:userId', userController.showByUserId);
+router.get('/:id', userController.show);
+
 
 /*
  * POST
