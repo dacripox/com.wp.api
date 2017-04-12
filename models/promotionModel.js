@@ -9,6 +9,10 @@ var promotionSchema = new Schema({
 		required: true,
 		unique: true
 	},
+	'promoType': {
+		type: Number,
+		required: true
+	},
 	'promoEnabled': {
 		type: Boolean,
 		default: true
@@ -54,6 +58,10 @@ var promotionSchema = new Schema({
 		required: true,
 	},
 	'participNumber': {
+		type: Number,
+		default: 0
+	},
+	'totalPoints': {
 		type: Number,
 		default: 0
 	},

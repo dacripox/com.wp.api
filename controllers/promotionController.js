@@ -248,6 +248,7 @@ module.exports = {
     create: function (req, res) {
         var promotion = new promotionModel({
             promoId: req.body.promoId,
+            promoType: req.body.promoType,
             promoEnabled: req.body.promoEnabled,
             promoEnded: req.body.promoEnded,
             createdDate: req.body.createdDate,
@@ -260,6 +261,7 @@ module.exports = {
             promoImage: req.body.promoImage,
             socialImage: req.body.socialImage,
             participNumber: req.body.participNumber,
+            totalPoints: req.body.totalPoints,
             shareMessages: req.body.shareMessages,
             winnersNumber: req.body.winnersNumber,
             priceItemAvg: req.body.priceItemAvg,
@@ -304,6 +306,7 @@ module.exports = {
             }
 
             promotion.promoId = req.body.promoId ? req.body.promoId : promotion.promoId;
+            promotion.promoType = req.body.promoType ? req.body.promoType : promotion.promoType;
             promotion.promoEnabled = req.body.promoEnabled ? req.body.promoEnabled : promotion.promoEnabled;
             promotion.promoEnded = req.body.promoEnded ? req.body.promoEnded : promotion.promoEnded;
             promotion.createdDate = req.body.createdDate ? req.body.createdDate : promotion.createdDate;
@@ -316,6 +319,7 @@ module.exports = {
             promotion.promoImage = req.body.promoImage ? req.body.promoImage : promotion.promoImage;
             promotion.socialImage = req.body.socialImage ? req.body.socialImage : promotion.socialImage;
             promotion.participNumber = req.body.participNumber ? req.body.participNumber : promotion.participNumber;
+            promotion.totalPoints = req.body.totalPoints ? req.body.totalPoints : promotion.totalPoints;
             promotion.shareMessages = req.body.shareMessages ? req.body.shareMessages : promotion.shareMessages;
             promotion.winnersNumber = req.body.winnersNumber ? req.body.winnersNumber : promotion.winnersNumber;
             promotion.priceItemAvg = req.body.priceItemAvg ? req.body.priceItemAvg : promotion.priceItemAvg;
