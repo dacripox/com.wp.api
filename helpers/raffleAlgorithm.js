@@ -1,27 +1,6 @@
-let getRandom = (arrayList, sumOfWeights) => {
-  var random = Math.floor(Math.random() * (sumOfWeights + 1));
-
-  return function (arrayList) {
-    random -= arrayList.weight;
-    return random <= 0;
-  };
-}
+var reduce = require('async-reduce');
 
 
-
-async function getFirstNElements(numElements, arrayList){
-    selectedElements = {};
-
-    sumOfWeights = arrayList.reduce(function (memo, item) {
-      return memo + item.points; //Change with the participant weight attribute (in our case, "points")
-    }, 0);
-
-    for (var i = 0; i < numElements; i++) {
-      let item = getRandom(arrayList, sumOfWeights);
-      selectedElements.push(item);
-    }
- return selectedElements;
-  }
 
 module.exports = {
 
@@ -31,6 +10,28 @@ module.exports = {
    *
    * @description :: Server-side logic for raffle (random weighted list selection).
    */
-  getFirstNElements: getFirstNElements
+  getFirstNElements: async (numElements, participations) => {
+    function getRandom() {
+      var sumOfWeights = participations.reduce(function (memo, participation) {
+        return memo + participation.points;
+      }, 0);
+      var random = Math.floor(Math.random() * (sumOfWeights + 1));
+
+      return function (participation) {
+        random -= participation.points;
+        return random <= 0;
+      };
+    }
+
+    let winners = [];
+    for (var i = 0; i < numElements; i++) {
+      var participation = participations.find(getRandom());
+      winners.push(participation);
+      var indexToRemove = participations.indexOf(participation);
+      participations.splice(indexToRemove,1);
+
+    }
+    return winners;
+  }
 
 }

@@ -6,7 +6,7 @@ var raffleAlgorithm = require('../helpers/raffleAlgorithm.js');
 var participationModel = require('../models/participationModel.js');
 var winnerModel = require('../models/winnerModel.js');
 
-async function getParticipants(promoId) {
+let getParticipants = function (promoId) {
     /*    participationModel.find({promoId: promoId}, function (err, participations) {
              if (err) {
                 return {};
@@ -17,87 +17,106 @@ async function getParticipants(promoId) {
             return participations;
         });*/
 
-    participationModel.find({ promoId: promoId })
-        .populate({
-            path: 'user'
-        })
-        .exec(function(err,participations) {
-            if (err) comsole.log(err);
-            return participations;
-        })
-}
 
-
-async function getPromotion(promoId) {
-    promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
-        if (err) {
-            return {};
-        }
-        if (!promotion) {
-            return {};
-        }
-        return promotion;
+    return new Promise((resolve, reject) => {
+        participationModel.find({ promoId: promoId })
+            .populate({
+                path: 'user'
+            })
+            .exec(function (err, participations) {
+                if (err) reject(err);
+                resolve((JSON.parse(JSON.stringify(participations))));
+            })
     });
 }
 
-async function endPromotion(promoId) {
-    promotionModel.findById({ promoId: promoId }, function (err, promotion) {
-        // Handle any possible database errors
-        if (err) {
-            res.status(500).send(err);
-        } else {
-            // Update each attribute with any possible attribute that may have been submitted in the body of the request
-            // If that attribute isn't in the request body, default back to whatever it was before.
-
-            promotion.promoEnded = true;
-
-            // Save the updated document back to the database
-            promotion.save(function (err, promotion) {
-                if (err) {
-                    res.status(500).send(err)
-                }
-                res.send(promotion);
-            });
-        }
+function getPromotion(promoId) {
+    return new Promise((resolve, reject) => {
+        promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
+            if (err) {
+                reject(err);
+            }
+            if (!promotion) {
+                reject();
+            }
+            resolve((JSON.parse(JSON.stringify(promotion))));
+        });
     });
 }
 
-async function createWinner(promoId, userId, points,displayName,profileImg,contact) {
+function endPromotion(promoId) {
+    return new Promise((resolve, reject) => {
+        promotionModel.findById({ promoId: promoId }, function (err, promotion) {
+            // Handle any possible database errors
+            if (err) {
+                return true;
+            } else {
+                // Update each attribute with any possible attribute that may have been submitted in the body of the request
+                // If that attribute isn't in the request body, default back to whatever it was before.
 
-    var winner = new winnerModel({
-        promoId: promoId,
-        userId: userId,
-        points: points,
-        displayName: displayName,
-        profileImg: profileImg,
-        contact: contact
+                promotion.promoEnded = true;
+
+                // Save the updated document back to the database
+                promotion.save(function (err, promotion) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resolve(true)
+                });
+            }
+        });
     });
 
 
-    winner.save(function (err, winner) {
-        if (err) {
-            return res.status(500).json({
-                message: 'Error when creating winner',
-                error: err
-            });
-        }
-        return res.status(201).json(winner);
-    });
 }
 
-async function makeRaffleAndEndPromotion(promoId) {
+function createWinner(promoId, userId, points, displayName, profileImg, contact) {
+    return new Promise((resolve, reject) => {
+        var winner = new winnerModel({
+            promoId: promoId,
+            userId: userId,
+            points: points,
+            displayName: displayName,
+            profileImg: profileImg,
+            contact: contact
+        });
+
+
+        winner.save(function (err, winner) {
+            if (err) {
+                reject(err);
+            }
+            resolve(winner);
+        });
+    });
+
+
+}
+
+let makeRaffleAndEndPromotion = async (promoId) => {
     let participants = await getParticipants(promoId);
     let promotion = await getPromotion(promoId);
-    let winners = await raffleAlgorithm.getFirstNElements(promotion.winnersNumber, participants);
-   
-    for (var i = 0; i < winners.length; i++) {
-        let displayName = (winner.user.firstName + winner.user.lastName ) || winner.user.firstName || winner.user.email || winner.user.phone;
-        let contact = partcipant.user.email || winner.user.phone;
-        await createWinner(winner.promoId, winner.userId, winner.user.points, displayName,contact);   
-    }
 
-    let endPromo = await endPromotion(promoId);
-    return winners;
+    if (promotion) {
+
+        let winners = await raffleAlgorithm.getFirstNElements(promotion.winnersNumber, participants);
+
+        for (var i = 0; i < winners.length; i++) {
+            let winner = winners[i];
+
+            let displayName = (winner.user.firstName +' '+ winner.user.lastName) || winner.user.firstName || (winner.user.email).substr(-7) + '******' || (winner.user.phone).substr(-3) + '***';
+            let contact = winner.user.email || winner.user.phone;
+            let winnerCreated = await createWinner(promotion._id, winner.user._id, winner.user.points, displayName, winner.user.profileImg, contact);
+
+        }
+
+        let promoEnded = await endPromotion(promoId);
+        if (promoEnded) {
+            return winners;
+        } else {
+            return;
+        }
+    }
 };
 
 
@@ -128,7 +147,7 @@ module.exports = {
      */
     listPromotionsByCompanyId: function (req, res) {
         let companyId = req.params.companyId;
-        promotionModel.find({companyId:companyId},function (err, promotions) {
+        promotionModel.find({ companyId: companyId }, function (err, promotions) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting promotion.',
@@ -234,10 +253,20 @@ module.exports = {
     /**
     * promotionController.endPromotion()
     */
-    endPromoWithRaffle: function (req, res) {
+    endPromoWithRaffle: async function (req, res) {
         var promoId = req.params.promoId;
 
-        return makeRaffleAndEndPromotion(promoId);
+        let winners = await makeRaffleAndEndPromotion(promoId);
+
+        if (winners) {
+            return res.send(winners);
+        }
+
+        return res.status(500).json({
+            message: 'Error when making raffle and ending promotion',
+            error: err
+        });
+
 
     },
 

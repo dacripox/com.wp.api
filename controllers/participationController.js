@@ -1,10 +1,111 @@
 var participationModel = require('../models/participationModel.js');
+var promotionModel = require('../models/promotionModel.js');
 
 /**
  * participationController.js
  *
  * @description :: Server-side logic for managing participations.
  */
+
+let incrementPromotionTotalPoints = function (promoId, points, cb) {
+
+    promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
+        if (err) {
+            cb(false);
+        }
+        if (!promotion) {
+            cb(false);
+        }
+
+        promotion.promoId = promotion.promoId;
+        promotion.promoType = promotion.promoType;
+        promotion.promoEnabled = promotion.promoEnabled;
+        promotion.promoEnded = promotion.promoEnded;
+        promotion.createdDate = promotion.createdDate;
+        promotion.startDate = promotion.startDate;
+        promotion.endDate = promotion.endDate;
+        promotion.promoTitle = promotion.promoTitle;
+        promotion.promoDescription = promotion.promoDescription;
+        promotion.promoLegalCond = promotion.promoLegalCond;
+        promotion.promoContactDetails = promotion.promoContactDetails;
+        promotion.promoImage = promotion.promoImage;
+        promotion.socialImage = promotion.socialImage;
+        promotion.participNumber = promotion.participNumber;
+        promotion.totalPoints = promotion.totalPoints + points;  //increment points
+        promotion.shareMessages = promotion.shareMessages;
+        promotion.winnersNumber = promotion.winnersNumber;
+        promotion.priceItemAvg = promotion.priceItemAvg;
+        promotion.showLocalization = promotion.showLocalization;
+        promotion.lat = promotion.lat;
+        promotion.lng = promotion.lng;
+        promotion.postalCode = promotion.postalCode;
+        promotion.fullAddress = promotion.fullAddress;
+        promotion.companyId = promotion.companyId;
+        promotion.trollNumber = promotion.trollNumber;
+        promotion.facebookTrackingPixel = promotion.facebookTrackingPixel;
+        promotion.googleTrackingPixel = promotion.googleTrackingPixel;
+
+        promotion.save(function (err, promotion) {
+            if (err) {
+                cb(false);
+            }
+
+            cb(true);
+        });
+    });
+
+}
+
+
+
+var incrementPromotionPaticipations = function (promoId, cb) {
+
+    promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
+        if (err) {
+            cb(false);
+        }
+        if (!promotion) {
+            cb(false);
+        }
+
+        promotion.promoId = promotion.promoId;
+        promotion.promoType = promotion.promoType;
+        promotion.promoEnabled = promotion.promoEnabled;
+        promotion.promoEnded = promotion.promoEnded;
+        promotion.createdDate = promotion.createdDate;
+        promotion.startDate = promotion.startDate;
+        promotion.endDate = promotion.endDate;
+        promotion.promoTitle = promotion.promoTitle;
+        promotion.promoDescription = promotion.promoDescription;
+        promotion.promoLegalCond = promotion.promoLegalCond;
+        promotion.promoContactDetails = promotion.promoContactDetails;
+        promotion.promoImage = promotion.promoImage;
+        promotion.socialImage = promotion.socialImage;
+        promotion.participNumber = promotion.participNumber + 1;  // increment by one
+        promotion.totalPoints = promotion.totalPoints;
+        promotion.shareMessages = promotion.shareMessages;
+        promotion.winnersNumber = promotion.winnersNumber;
+        promotion.priceItemAvg = promotion.priceItemAvg;
+        promotion.showLocalization = promotion.showLocalization;
+        promotion.lat = promotion.lat;
+        promotion.lng = promotion.lng;
+        promotion.postalCode = promotion.postalCode;
+        promotion.fullAddress = promotion.fullAddress;
+        promotion.companyId = promotion.companyId;
+        promotion.trollNumber = promotion.trollNumber;
+        promotion.facebookTrackingPixel = promotion.facebookTrackingPixel;
+        promotion.googleTrackingPixel = promotion.googleTrackingPixel;
+
+        promotion.save(function (err, promotion) {
+            if (err) {
+                cb(false);
+            }
+
+            cb(true);
+        });
+    });
+
+}
 module.exports = {
     /**
      * participationController.userIsParticipating()
@@ -27,7 +128,7 @@ module.exports = {
             return res.json({ participating: true });
         });
     },
-  
+
 
     /**
      * participationController.list()
@@ -179,7 +280,7 @@ module.exports = {
         });
     },
     /**
-     * incrementVisualization.update()
+     * participationController.incrementVisualization()
      */
     incrementVisualization: function (req, res) {
         var userId = req.params.userId;
@@ -218,14 +319,16 @@ module.exports = {
                     });
                 }
 
+
+
                 return res.json(participation);
             });
         });
     },
     /**
-      * incrementVisualization.update()
+      * participationController.incrementParticipation()
       */
-    incrementParticpation: function (req, res) {
+    incrementParticipation: function (req, res) {
         var userId = req.params.userId;
         var promoId = req.params.promoId;
         participationModel.findOne({ userId: userId, promoId: promoId }, function (err, participation) {
@@ -262,16 +365,31 @@ module.exports = {
                     });
                 }
 
-                return res.json(participation);
+
+               return incrementPromotionPaticipations(promoId, function (status) {
+                    if (status) {
+                        return res.json(participation);
+                    } else {
+                        return res.status(500).json({
+                            message: 'Error when updating participation.',
+                            error: err
+                        });
+                    }
+                });
+
+                // return res.status(500).json({
+                //     message: 'Error when updating participation.',
+                //     error: err
+                // });
+
+                //return res.json(participation);
             });
         });
     },
     /**
-        * incrementPoints.update()
+        * participationController.incrementPoints()
         */
     incrementPoints: function (req, res) {
-
-        //increment-points/' + userId + '/' + points
 
         var userId = req.params.userId;
         var promoId = req.params.promoId;
@@ -311,7 +429,23 @@ module.exports = {
                     });
                 }
 
-                return res.json(participation);
+              return incrementPromotionTotalPoints(promoId, points, function (status) {
+                    if (status) {
+                        return res.json(participation);
+                    } else {
+                        return res.status(500).json({
+                            message: 'Error when updating participation.',
+                            error: err
+                        });
+                    }
+                });
+
+                // return res.status(500).json({
+                //     message: 'Error when updating participation.',
+                //     error: err
+                // });
+
+               // return res.json(participation);
             });
         });
     },

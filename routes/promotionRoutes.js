@@ -31,12 +31,12 @@ router.get('/available/:name', promotionController.idAvailable); //TODO: make va
 /*
  * POST
  */
-router.post('/endWithRaffle/:idPromo', promotionController.endPromoWithRaffle);
+router.post('/endWithRaffle/:promoId', promotionController.endPromoWithRaffle);
 
 /*
  * POST
  */
-router.post('/end/:idPromo', promotionController.endPromotion);
+router.post('/end/:promoId', promotionController.endPromotion);
 
 /*
  * POST
