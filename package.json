@@ -8,6 +8,7 @@
     "body-parser": "^1.17.1",
     "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "cors": "^2.8.3",
     "express-formidable": "^1.0.0",
     "handlebars": "^4.0.6",
     "json-query": "^2.2.0",
@@ -15,6 +16,7 @@
     "mongoose": "^4.9.1",
     "mongoose-unique-validator": "^1.0.5",
     "path": "^0.12.7",
+    "fs": "0.0.1-security",
     "winston": "^2.3.1"
   },
   "devDependencies": {},
