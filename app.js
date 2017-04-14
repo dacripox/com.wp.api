@@ -89,7 +89,7 @@ app.use('/auth/stats', auth, stats);
 
 
 app.listen(process.env.PORT || 3000, function () {
-  console.log('WhatsPromo API listening on port '+process.env.PORT || 3000+'!');
+  console.log('WhatsPromo API listening on port '+(process.env.PORT || 3000)+'!');
 
   console.log(",--.   ,--.,--.               ,--.         ,------.                                 ");
   console.log("|  |   |  ||  ,---.  ,--,--.,-'  '-. ,---. |  .--. ',--.--. ,---. ,--,--,--. ,---.  ");
