@@ -11,6 +11,7 @@ module.exports = {
    * @description :: Server-side logic for raffle (random weighted list selection).
    */
   getFirstNElements: async (numElements, participations) => {
+    if(numElements > participations.length) numElements = participations.length;
     function getRandom() {
       var sumOfWeights = participations.reduce(function (memo, participation) {
         return memo + participation.points;
