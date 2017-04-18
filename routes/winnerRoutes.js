@@ -10,7 +10,7 @@ router.get('/', winnerController.list);
 /*
  * GET
  */
-router.get('/promotion/:promoId', winnerController.listByPromotion);
+router.get('/promotion/:promo_id', winnerController.listByPromotion);
 
 /*
  * GET

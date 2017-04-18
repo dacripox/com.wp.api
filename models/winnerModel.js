@@ -3,9 +3,13 @@ var Schema   = mongoose.Schema;
 var uniqueValidator = require('mongoose-unique-validator');
 
 var winnerSchema = new Schema({
-	'promoId' : {
+	'promo_id' : {
 	 	type: Schema.Types.ObjectId,
 	 	ref: 'promotion',
+	 	required: true
+	},
+	'promoId' : {
+		type: String,
 	 	required: true
 	},
 	'userId' : {

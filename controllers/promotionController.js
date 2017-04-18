@@ -43,36 +43,63 @@ function getPromotion(promoId) {
         });
     });
 }
-
-function endPromotion(promoId) {
+/**
+   * promotionController.endPromotion()
+   */
+let endPromotionHelper = function (promoId) {
     return new Promise((resolve, reject) => {
-        promotionModel.findById({ promoId: promoId }, function (err, promotion) {
+
+        promotionModel.findOne({ promoId: promoId }, function (err, promotion) {
             // Handle any possible database errors
             if (err) {
-                return true;
+                reject(err);
             } else {
                 // Update each attribute with any possible attribute that may have been submitted in the body of the request
                 // If that attribute isn't in the request body, default back to whatever it was before.
 
-                promotion.promoEnded = true;
+                promotion.promoId = promotion.promoId;
+                promotion.promoType = promotion.promoType;
+                promotion.promoEnabled = promotion.promoEnabled; 
+                promotion.promoEnded = true; // end promotion
+                promotion.createdDate = promotion.createdDate;
+                promotion.startDate = promotion.startDate;
+                promotion.endDate = promotion.endDate;
+                promotion.promoTitle = promotion.promoTitle;
+                promotion.promoDescription = promotion.promoDescription;
+                promotion.promoLegalCond = promotion.promoLegalCond;
+                promotion.promoContactDetails = promotion.promoContactDetails;
+                promotion.promoImage = promotion.promoImage;
+                promotion.socialImage = promotion.socialImage;
+                promotion.participNumber = promotion.participNumber;
+                promotion.totalPoints = promotion.totalPoints;
+                promotion.shareMessages = promotion.shareMessages;
+                promotion.winnersNumber = promotion.winnersNumber;
+                promotion.priceItemAvg = promotion.priceItemAvg;
+                promotion.showLocalization = promotion.showLocalization;
+                promotion.lat = promotion.lat;
+                promotion.lng = promotion.lng;
+                promotion.postalCode = promotion.postalCode;
+                promotion.fullAddress = promotion.fullAddress;
+                promotion.companyId = promotion.companyId;
+                promotion.trollNumber = promotion.trollNumber;
+                promotion.facebookTrackingPixel = promotion.facebookTrackingPixel;
+                promotion.googleTrackingPixel = promotion.googleTrackingPixel;
 
                 // Save the updated document back to the database
                 promotion.save(function (err, promotion) {
                     if (err) {
-                        reject(err);
+                        reject(err)
                     }
-                    resolve(true)
+                    resolve(promotion);
                 });
             }
         });
     });
-
-
-}
-
-function createWinner(promoId, userId, points, displayName, profileImg, contact) {
+    }
+function createWinner(promo_id,promoId,userId, points, displayName, profileImg, contact) {
     return new Promise((resolve, reject) => {
         var winner = new winnerModel({
+            promo_id: promo_id,
             promoId: promoId,
             userId: userId,
             points: points,
@@ -103,14 +130,12 @@ let makeRaffleAndEndPromotion = async (promoId) => {
 
         for (var i = 0; i < winners.length; i++) {
             let winner = winners[i];
-
-            let displayName = (winner.user.firstName +' '+ winner.user.lastName) || winner.user.firstName || (winner.user.email).substr(-7) + '******' || (winner.user.phone).substr(-3) + '***';
+            let displayName = (winner.user.firstName + ' ' + winner.user.lastName) || winner.user.firstName || (winner.user.email).substr(-7) + '******' || (winner.user.phone).substr(-3) + '***';
             let contact = winner.user.email || winner.user.phone;
-            let winnerCreated = await createWinner(promotion._id, winner.user._id, winner.user.points, displayName, winner.user.profileImg, contact);
-
+            let winnerCreated = await createWinner(promotion._id, promoId, winner.user._id, winner.user.points, displayName, winner.user.profileImg, contact);
         }
 
-        let promoEnded = await endPromotion(promoId);
+        let promoEnded = await endPromotionHelper(promoId);
         if (promoEnded) {
             return winners;
         } else {
@@ -236,7 +261,33 @@ module.exports = {
                 // Update each attribute with any possible attribute that may have been submitted in the body of the request
                 // If that attribute isn't in the request body, default back to whatever it was before.
 
-                promotion.promoEnded = true;
+                promotion.promoId = promotion.promoId;
+                promotion.promoType = promotion.promoType;
+                promotion.promoEnabled = true; // end promotion
+                promotion.promoEnded = promotion.promoEnded;
+                promotion.createdDate = promotion.createdDate;
+                promotion.startDate = promotion.startDate;
+                promotion.endDate = promotion.endDate;
+                promotion.promoTitle = promotion.promoTitle;
+                promotion.promoDescription = promotion.promoDescription;
+                promotion.promoLegalCond = promotion.promoLegalCond;
+                promotion.promoContactDetails = promotion.promoContactDetails;
+                promotion.promoImage = promotion.promoImage;
+                promotion.socialImage = promotion.socialImage;
+                promotion.participNumber = promotion.participNumber;
+                promotion.totalPoints = promotion.totalPoints;
+                promotion.shareMessages = promotion.shareMessages;
+                promotion.winnersNumber = promotion.winnersNumber;
+                promotion.priceItemAvg = promotion.priceItemAvg;
+                promotion.showLocalization = promotion.showLocalization;
+                promotion.lat = promotion.lat;
+                promotion.lng = promotion.lng;
+                promotion.postalCode = promotion.postalCode;
+                promotion.fullAddress = promotion.fullAddress;
+                promotion.companyId = promotion.companyId;
+                promotion.trollNumber = promotion.trollNumber;
+                promotion.facebookTrackingPixel = promotion.facebookTrackingPixel;
+                promotion.googleTrackingPixel = promotion.googleTrackingPixel;
 
                 // Save the updated document back to the database
                 promotion.save(function (err, promotion) {
@@ -260,13 +311,12 @@ module.exports = {
 
         if (winners) {
             return res.send(winners);
+        } else {
+            return res.status(500).json({
+                message: 'Error when making raffle and ending promotion',
+                error: err
+            });
         }
-
-        return res.status(500).json({
-            message: 'Error when making raffle and ending promotion',
-            error: err
-        });
-
 
     },
 

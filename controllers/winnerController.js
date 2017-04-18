@@ -26,8 +26,8 @@ module.exports = {
      * winnerController.listByPromotion()
      */
     listByPromotion: function (req, res) {
-        var promoId = req.params.promoId;
-        winnerModel.find({promoId: promoId},function (err, winners) {
+        var promo_id = req.params.promo_id;
+        winnerModel.find({promoId: promo_id},function (err, winners) {
             if (err) {
                 return res.status(500).json({
                     message: 'Error when getting winner.',
@@ -65,6 +65,7 @@ module.exports = {
     create: function (req, res) {
         var winner = new winnerModel({
 			promoId : req.body.promoId,
+			promo_id : req.body.promo_id,
 			userId : req.body.userId,
 			createdDate : req.body.createdDate,
 			points : req.body.points,
@@ -103,6 +104,7 @@ module.exports = {
             }
 
             winner.promoId = req.body.promoId ? req.body.promoId : winner.promoId;
+            winner.promo_id = req.body.promo_id ? req.body.promo_id : winner.promo_id;
 			winner.userId = req.body.userId ? req.body.userId : winner.userId;
 			winner.createdDate = req.body.createdDate ? req.body.createdDate : winner.createdDate;
 			winner.points = req.body.points ? req.body.points : winner.points;
