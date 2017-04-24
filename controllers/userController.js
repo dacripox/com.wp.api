@@ -50,11 +50,54 @@ module.exports = {
      * checkIfUserExist.show()
      */
     checkIfUserExist: function (req, res) {
-        console.log("entra");
         var email = req.params.email;
         var phone = req.params.phone;
+        var userId = req.params.userId;
 
-        if (email) {
+        if (userId) {
+
+            userModel.findOne({ "userId": userId }, function (err, user) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting user.',
+                        error: err
+                    });
+                }
+                if (user) {
+                    return res.json(user);
+                } else {
+
+                    userModel.findOne({ "email": email }, function (err, user) {
+                        if (err) {
+                            return res.status(500).json({
+                                message: 'Error when getting user.',
+                                error: err
+                            });
+                        }
+                        if (user) {
+                            return res.json(user);
+                        } else {
+
+                            userModel.findOne({ "phone": phone }, function (err, user) {
+                                if (err) {
+                                    return res.status(500).json({
+                                        message: 'Error when getting user.',
+                                        error: err
+                                    });
+                                }
+                                if (user) {
+                                    return res.json(user);
+                                } else {
+                                    return res.json({});
+                                }
+                            });
+
+                        }
+                    });
+                }
+            });
+
+        } else if (email) {
             userModel.findOne({ "email": email }, function (err, user) {
                 if (err) {
                     return res.status(500).json({
@@ -64,8 +107,8 @@ module.exports = {
                 }
                 if (user) {
                     return res.json(user);
-                }else{
-                    
+                } else {
+
                     userModel.findOne({ "phone": phone }, function (err, user) {
                         if (err) {
                             return res.status(500).json({
@@ -75,11 +118,11 @@ module.exports = {
                         }
                         if (user) {
                             return res.json(user);
-                        }else{
+                        } else {
                             return res.json({});
                         }
                     });
-                    
+
                 }
             });
         } else if (phone) {
@@ -92,13 +135,13 @@ module.exports = {
                 }
                 if (user) {
                     return res.json(user);
-                }else{
+                } else {
                     return res.json({});
                 }
             });
         }
 
-        if (!phone && !email) {
+        if (!phone && !email && !userId) {
             return res.json({});
         }
     },

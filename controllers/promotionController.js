@@ -59,7 +59,7 @@ let endPromotionHelper = function (promoId) {
 
                 promotion.promoId = promotion.promoId;
                 promotion.promoType = promotion.promoType;
-                promotion.promoEnabled = promotion.promoEnabled; 
+                promotion.promoEnabled = promotion.promoEnabled;
                 promotion.promoEnded = true; // end promotion
                 promotion.createdDate = promotion.createdDate;
                 promotion.startDate = promotion.startDate;
@@ -95,8 +95,8 @@ let endPromotionHelper = function (promoId) {
             }
         });
     });
-    }
-function createWinner(promo_id,promoId,userId, points, displayName, profileImg, contact) {
+}
+function createWinner(promo_id, promoId, userId, points, displayName, profileImg, contact) {
     return new Promise((resolve, reject) => {
         var winner = new winnerModel({
             promo_id: promo_id,
@@ -121,6 +121,8 @@ function createWinner(promo_id,promoId,userId, points, displayName, profileImg, 
 }
 
 let makeRaffleAndEndPromotion = async (promoId) => {
+    let promoEnded = await endPromotionHelper(promoId);
+
     let participants = await getParticipants(promoId);
     let promotion = await getPromotion(promoId);
 
@@ -128,15 +130,18 @@ let makeRaffleAndEndPromotion = async (promoId) => {
 
         let winners = await raffleAlgorithm.getFirstNElements(promotion.winnersNumber, participants);
 
+        let allWinnersCreated = false;
         for (var i = 0; i < winners.length; i++) {
             let winner = winners[i];
-            let displayName = (winner.user.firstName + ' ' + winner.user.lastName) || winner.user.firstName || (winner.user.email).substr(-7) + '******' || (winner.user.phone).substr(-3) + '***';
+            let displayName = (winner.user.firstName && winner.user.lastName) ? winner.user.firstName + ' ' + winner.user.lastName: undefined || (winner.user.email).substr(-7) + '******' || (winner.user.phone).substr(-3) + '***';
             let contact = winner.user.email || winner.user.phone;
-            let winnerCreated = await createWinner(promotion._id, promoId, winner.user._id, winner.user.points, displayName, winner.user.profileImg, contact);
+            let winnerCreated = await createWinner(promotion._id, promoId, winner.user._id, winner.points, displayName, winner.user.profileImg, contact);
+
+            if (i >= winners.length -1) allWinnersCreated = true;
         }
 
-        let promoEnded = await endPromotionHelper(promoId);
-        if (promoEnded) {
+
+        if (allWinnersCreated) {
             return winners;
         } else {
             return;

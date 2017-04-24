@@ -232,7 +232,30 @@ module.exports = {
                     error: err
                 });
             }
+
+
+            // return incrementPromotionPaticipations(req.body.promoId, function (status) {
+            //     if (status) {
+            //         return incrementPromotionTotalPoints(req.body.promoId, 5, function (status) {
+            //             if (status) {
             return res.status(201).json(participation);
+            //            } else {
+            //                 return res.status(500).json({
+            //                     message: 'Error when updating participation.',
+            //                     error: err
+            //                 });
+            //             }
+            //         });
+            //     } else {
+            //         return res.status(500).json({
+            //             message: 'Error when creating participation',
+            //             error: err
+            //         });
+            //     }
+            // });
+
+
+
         });
     },
 
@@ -318,9 +341,6 @@ module.exports = {
                         error: err
                     });
                 }
-
-
-
                 return res.json(participation);
             });
         });
@@ -364,18 +384,18 @@ module.exports = {
                         error: err
                     });
                 }
+                return res.json(participation);
 
-
-               return incrementPromotionPaticipations(promoId, function (status) {
-                    if (status) {
-                        return res.json(participation);
-                    } else {
-                        return res.status(500).json({
-                            message: 'Error when updating participation.',
-                            error: err
-                        });
-                    }
-                });
+                /*     return incrementPromotionPaticipations(promoId, function (status) {
+                         if (status) {
+                             return res.json(participation);
+                         } else {
+                             return res.status(500).json({
+                                 message: 'Error when updating participation.',
+                                 error: err
+                             });
+                         }
+                     });*/
 
                 // return res.status(500).json({
                 //     message: 'Error when updating participation.',
@@ -385,6 +405,32 @@ module.exports = {
                 //return res.json(participation);
             });
         });
+    },
+    /**
+      * participationController.incrementParticipation()
+      */
+    incrementParticipationPromo: function (req, res) {
+        var promoId = req.params.promoId;
+        if (!promoId) {
+            return res.status(500).json({
+                message: 'Error when incrementing participation (promotion total)',
+                error: err
+            });
+        }
+
+
+        return incrementPromotionPaticipations(promoId, function (status) {
+            if (status) {
+                return res.json({ incrementParticipationStatus: "ok" });
+            } else {
+                return res.status(500).json({
+                    message: 'Error when incrementing participation (promotion total)',
+                    error: err
+                });
+            }
+        });
+
+
     },
     /**
         * participationController.incrementPoints()
@@ -429,8 +475,9 @@ module.exports = {
                     });
                 }
 
-              return incrementPromotionTotalPoints(promoId, points, function (status) {
+                incrementPromotionTotalPoints(promoId, points, function (status) {
                     if (status) {
+
                         return res.json(participation);
                     } else {
                         return res.status(500).json({
@@ -445,7 +492,7 @@ module.exports = {
                 //     error: err
                 // });
 
-               // return res.json(participation);
+                // return res.json(participation);
             });
         });
     },

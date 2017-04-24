@@ -39,6 +39,10 @@ router.post('/increment-visualization/user/:userId/promotion/:promoId', particip
  * POST
  */
 router.post('/increment-participation/user/:userId/promotion/:promoId', participationController.incrementParticipation);
+/*
+ * POST
+ */
+router.post('/increment-participation/promotion/:promoId', participationController.incrementParticipationPromo);
 
 /*
  * PUT

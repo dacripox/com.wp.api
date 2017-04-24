@@ -11,7 +11,7 @@ router.get('/', userController.list);
 /*
  * GET
  */
-router.get('/exist/email/:email/phone/:phone', userController.checkIfUserExist);
+router.get('/exist/id/:userId/email/:email/phone/:phone', userController.checkIfUserExist);
 
 
 /*
