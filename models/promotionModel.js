@@ -65,7 +65,7 @@ var promotionSchema = new Schema({
 		type: Number,
 		default: 0
 	},
-	'shareMessages': Array,
+	'shareMessages': String,
 	'winnersNumber': {
 		type: Number,
 		required: true,
