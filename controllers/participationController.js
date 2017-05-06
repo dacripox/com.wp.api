@@ -511,5 +511,25 @@ module.exports = {
             }
             return res.status(204).json();
         });
+    },
+    /**
+ * participationController.listWithFullUserByPromotion()
+ */
+    listWithFullUserByPromotion: function (req, res) {
+        var promoId = req.params.promoId;
+        participationModel.find({ "promoId": promoId })
+            .populate({
+                path: 'user'
+            }).exec(function (err, participations) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting participations.',
+                        error: err
+                    });
+                }
+                return res.json(participations);
+            });
     }
+
+
 };

@@ -45,6 +45,11 @@ router.post('/increment-participation/user/:userId/promotion/:promoId', particip
 router.post('/increment-participation/promotion/:promoId', participationController.incrementParticipationPromo);
 
 /*
+ * GET
+ */
+router.get('/promotion/:promoId/full', participationController.listWithFullUserByPromotion);
+
+/*
  * PUT
  */
 router.put('/:id', participationController.update);
