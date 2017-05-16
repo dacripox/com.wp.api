@@ -327,7 +327,6 @@ module.exports = {
         } else {
             return res.status(500).json({
                 message: 'Error when making raffle and ending promotion',
-                error: err
             });
         }
 
