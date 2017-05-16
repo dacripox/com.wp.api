@@ -10,6 +10,7 @@ var company = require('./routes/companyRoutes');
 var participation = require('./routes/participationRoutes');
 var stats = require('./routes/statsRoutes');
 var winner = require('./routes/winnerRoutes');
+var notification = require('./routes/notificationRoutes');
 
 var mongoose = require('mongoose');
 //mongoose.connect('mongodb://178.62.114.122:27017/whatspromo');
@@ -45,6 +46,7 @@ app.use('/company', company);
 app.use('/participation', participation);
 app.use('/winner', winner);
 app.use('/stats', stats);
+app.use('/notification', notification);
 
 
 

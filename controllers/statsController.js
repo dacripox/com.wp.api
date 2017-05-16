@@ -181,7 +181,63 @@ module.exports = {
 
                 return res.json(obj);
             });
-    }
+    },
+    /**
+     * statsController.generalAllPromotions()
+     */
+    generalAllPromotions: function (req, res) {
+        participationModel.aggregate(
+
+            // Pipeline
+            [
+                // Stage 1
+                {
+                    $group: {
+                        _id: { promoId: "$promoId" },
+
+                        participants: { $sum: 1 },
+                        totalPoints: { $sum: "$points" },
+
+                        visualizations: { $sum: "$friendVisualNumber" },
+                        visualizationAvg: { $avg: "$friendVisualNumber" },
+
+                        participationsFromRefFriend: { $sum: "$friendParticNumber" },
+                        participationAvg: { $avg: "$friendParticNumber" },
+
+
+                    }
+                },
+
+            ], function (err, stats) {
+                if (err) {
+                    return res.status(500).json({
+                        message: 'Error when getting general stats for all promotions.',
+                        error: err
+                    });
+                }
+
+                //Custom response
+
+                let obj = {};
+
+                if (stats.length > 0) {
+                    obj.friendVisualNumber = stats[0].friendVisualNumber;
+                    obj.participantsNumber = stats[0].participantsNumber;
+                    obj.points = stats[0].points;
+                    obj.winnersNumber = stats[0].winnersNumber[0];
+                } else {
+                    obj.friendVisualNumber = "No disponible";
+                    obj.participantsNumber = "No disponible";
+                    obj.points = "No disponible";
+                    obj.winnersNumber = "No disponible";
+                }
+
+
+                return res.json(obj);
+            });
+    },
+
+
 
 
 

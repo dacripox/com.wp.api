@@ -2,6 +2,7 @@ var promotionModel = require('../models/promotionModel.js');
 var partcipationController = require('../controllers/participationController.js');
 var promotionController = require('../controllers/promotionController.js');
 var raffleAlgorithm = require('../helpers/raffleAlgorithm.js');
+var notificationHelper = require('../helpers/notificationHelper.js');
 
 var participationModel = require('../models/participationModel.js');
 var winnerModel = require('../models/winnerModel.js');
@@ -315,6 +316,13 @@ module.exports = {
         let winners = await makeRaffleAndEndPromotion(promoId);
 
         if (winners) {
+
+            //send email with winners to the company 
+           await notificationHelper.sendEmailWithWinnersToCompany(promoId,winners);
+            
+            //send email with winners to the company 
+         //   await notificationHelper.sendNotificationAndEmailToWinners(winners);
+
             return res.send(winners);
         } else {
             return res.status(500).json({
