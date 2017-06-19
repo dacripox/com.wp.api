@@ -176,8 +176,8 @@ module.exports = {
             createdDate: req.body.createdDate,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            sex: req.body.sex,
-            age: req.body.age,
+            sex: req.body.gender,
+            age: req.body.ageRange,
             email: req.body.email,
             phone: req.body.phone,
             password: req.body.password,
@@ -229,8 +229,8 @@ module.exports = {
             user.createdDate = req.body.createdDate ? req.body.createdDate : user.createdDate;
             user.firstName = req.body.firstName ? req.body.firstName : user.firstName;
             user.lastName = req.body.lastName ? req.body.lastName : user.lastName;
-            user.sex = req.body.sex ? req.body.sex : user.sex;
-            user.age = req.body.age ? req.body.age : user.age;
+            user.sex = req.body.gender ? req.body.gender : user.sex;
+            user.age = req.body.ageRange ? req.body.ageRange : user.age;
             user.email = req.body.email ? req.body.email : user.email;
             user.phone = req.body.phone ? req.body.phone : user.phone;
             user.password = req.body.password ? req.body.password : user.password;

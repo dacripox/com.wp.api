@@ -62,7 +62,7 @@ module.exports = {
 
     winnersHTMLTable += '<table  border="1" cellpadding="0" cellspacing="0">';
     winnersHTMLTable += "<tr> <td>Nombre</td> <td>Contacto</td> <td>Puntos</td> </tr>";
-    let winnersJSON = JSON.parse(winners);
+    let winnersJSON = JSON.parse(JSON.stringify(winners));
     winnersJSON.forEach(function (winner) {
       winnersHTMLTable += '<tr> <td>' + winner.displayName + '</td> <td>' + winner.contact + '</td> <td>' + winner.points + '</td> </tr>';
     }, this);
