@@ -83,6 +83,7 @@ module.exports = {
 			facebook : req.body.facebook,
 			linkedin : req.body.linkedin,
             tollNumber : req.body.tollNumber
+
         });
 
         company.save(function (err, company) {
